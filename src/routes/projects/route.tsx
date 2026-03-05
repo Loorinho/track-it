@@ -1,4 +1,5 @@
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
+import { ModeToggle } from '~/components/mode-toggle'
 import { Button } from '~/components/ui/button'
 
 export const Route = createFileRoute('/projects')({
@@ -16,6 +17,7 @@ function RouteComponent() {
           </div>
            <div className='flex items-center gap-2'>
             <Link to="/projects">Projects</Link>
+            <ModeToggle />
             <Button variant="outline" className='cursor-pointer' size="sm">Logout</Button>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { api } from 'convex/_generated/api'
 import { useQuery } from 'convex/react'
-import { ArrowUpRight, Folder } from 'lucide-react'
+import { Folder } from 'lucide-react'
 import { Button } from '~/components/ui/button'
 import {
   Empty,
