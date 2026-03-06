@@ -32,6 +32,19 @@ function RouteComponent() {
   const projects = useQuery(api.projects.listProjects)
   const projectTypes = useQuery(api.project_types.listProjectTypes)
 
+  const dateFormatter = new Intl.DateTimeFormat("en-US", {
+    // year: "numeric",
+    // month: "short",
+    // day: "numeric",
+    // hour: "2-digit",
+    // minute: "2-digit",
+    dateStyle: "medium",
+    timeStyle: "medium",
+    
+
+  })
+
+
     const form = useForm({
     defaultValues: {
       name: "",
@@ -66,7 +79,7 @@ function RouteComponent() {
 
 
 
-  return <div className='mx-10 my-3'>
+  return <div className='mx-10 my-3 h-screen'>
 
      
 
@@ -251,11 +264,19 @@ function RouteComponent() {
         <>
        <h1 className='text-2xl font-bold text-center'>Projects</h1>
         <Button variant="default" onClick={() => setOpen(true)} className='w-23 flex items-center cursor-pointer px-2'>Add New</Button>
-        <ul className='list-disc list-inside'>
+               <div className='flex gap-5 mt-5'>
+
           {projects.map((project) => (
-            <li key={project._id}>{project.name}</li>
+            <div className='h-50 w-70 shadow-md rounded-md p-3 mb-2 border' key={project._id}>
+
+              <p className='font-semibold text-2xl'>{project.name}</p>
+               <p className="line-clamp-2">{project.description}</p>
+              <p className="">Type: {project.type}</p>
+              <p className="">Created At: {dateFormatter.format(project._creationTime)}</p>
+
+            </div>
           ))}
-        </ul>
+        </div>
         </>
       ) 
     }
