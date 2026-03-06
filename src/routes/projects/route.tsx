@@ -15,8 +15,12 @@ function RouteComponent() {
           <div className='flex items-center gap-2'>
             <p>Track.IT</p>
           </div>
-           <div className='flex items-center gap-2'>
-            <Link to="/projects">Projects</Link>
+          <div className='flex gap-3 items-center'>
+                <Link to="/projects">Projects</Link>
+             <Link to="/projects/types">Project Types</Link>
+          </div>
+           <div className='flex items-center gap-5'>
+        
             <ModeToggle />
             <Button variant="outline" className='cursor-pointer' size="sm">Logout</Button>
           </div>

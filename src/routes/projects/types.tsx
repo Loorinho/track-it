@@ -18,7 +18,7 @@ import {
   TableRow,
 } from "~/components/ui/table"
 import { useState } from 'react'
-import { Plus } from 'lucide-react'
+import { Loader, Loader2, Plus } from 'lucide-react'
 
 
 export const Route = createFileRoute('/projects/types')({
@@ -29,7 +29,7 @@ function RouteComponent() {
 
   const [open, setOpen] = useState(false)
   const createProjectType = useMutation(api.project_types.createProjectType)
-  const projectTypes = useQuery(api.project_types.listProjectTypes) ?? []
+  const projectTypes = useQuery(api.project_types.listProjectTypes)
 
 
   const form = useForm({
@@ -40,7 +40,7 @@ function RouteComponent() {
       onSubmit: projectTypeSchema,
     },
     onSubmit: async ({ value }) => {
-      const id = createProjectType({name: value.name})
+      const id = await createProjectType({name: value.name})
 
       if (!id) {
         toast.error("Failed to create project type")
@@ -115,8 +115,6 @@ function RouteComponent() {
            
           </FieldGroup>
         </form>
-
-    
           <DialogFooter >
           <Field orientation="horizontal"  className="justify-end gap-2">
               <DialogClose asChild>
@@ -132,7 +130,25 @@ function RouteComponent() {
         </DialogContent>
     </Dialog>
     
-    <Table>
+    
+          {projectTypes === undefined && (
+            <div className="flex justify-center items-center h-40">
+              <div>
+                <Loader size={50} className="text-green-600 animate-spin" />
+              </div>
+            </div>
+          )}
+
+          {projectTypes && projectTypes.length === 0 && (
+            <div className="text-center my-4">
+              <h2 className="font-medium text-2xl">
+                You do not have any project types at the moment
+              </h2>
+            </div>
+          )}
+
+            {projectTypes && projectTypes.length > 0 && (
+                  <Table>
   <TableCaption>A list of your recent project types.</TableCaption>
   <TableHeader>
     <TableRow>
@@ -161,7 +177,8 @@ function RouteComponent() {
         ))}
   </TableBody>
 </Table>
-
+            )
+          }
 
     </section>
 }
