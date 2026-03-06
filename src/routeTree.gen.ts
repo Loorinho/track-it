@@ -9,15 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AnotherPageRouteImport } from './routes/anotherPage'
+import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ProjectsRouteRouteImport } from './routes/projects/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
 import { Route as ProjectsTypesRouteImport } from './routes/projects/types'
 
-const AnotherPageRoute = AnotherPageRouteImport.update({
-  id: '/anotherPage',
-  path: '/anotherPage',
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsRouteRoute = ProjectsRouteRouteImport.update({
@@ -44,13 +44,13 @@ const ProjectsTypesRoute = ProjectsTypesRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/projects': typeof ProjectsRouteRouteWithChildren
-  '/anotherPage': typeof AnotherPageRoute
+  '/register': typeof RegisterRoute
   '/projects/types': typeof ProjectsTypesRoute
   '/projects/': typeof ProjectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/anotherPage': typeof AnotherPageRoute
+  '/register': typeof RegisterRoute
   '/projects/types': typeof ProjectsTypesRoute
   '/projects': typeof ProjectsIndexRoute
 }
@@ -58,25 +58,20 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/projects': typeof ProjectsRouteRouteWithChildren
-  '/anotherPage': typeof AnotherPageRoute
+  '/register': typeof RegisterRoute
   '/projects/types': typeof ProjectsTypesRoute
   '/projects/': typeof ProjectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/projects'
-    | '/anotherPage'
-    | '/projects/types'
-    | '/projects/'
+  fullPaths: '/' | '/projects' | '/register' | '/projects/types' | '/projects/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/anotherPage' | '/projects/types' | '/projects'
+  to: '/' | '/register' | '/projects/types' | '/projects'
   id:
     | '__root__'
     | '/'
     | '/projects'
-    | '/anotherPage'
+    | '/register'
     | '/projects/types'
     | '/projects/'
   fileRoutesById: FileRoutesById
@@ -84,16 +79,16 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProjectsRouteRoute: typeof ProjectsRouteRouteWithChildren
-  AnotherPageRoute: typeof AnotherPageRoute
+  RegisterRoute: typeof RegisterRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/anotherPage': {
-      id: '/anotherPage'
-      path: '/anotherPage'
-      fullPath: '/anotherPage'
-      preLoaderRoute: typeof AnotherPageRouteImport
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects': {
@@ -144,7 +139,7 @@ const ProjectsRouteRouteWithChildren = ProjectsRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProjectsRouteRoute: ProjectsRouteRouteWithChildren,
-  AnotherPageRoute: AnotherPageRoute,
+  RegisterRoute: RegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

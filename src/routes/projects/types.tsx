@@ -17,6 +17,8 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table"
+import { useState } from 'react'
+import { Plus } from 'lucide-react'
 
 
 export const Route = createFileRoute('/projects/types')({
@@ -25,6 +27,7 @@ export const Route = createFileRoute('/projects/types')({
 
 function RouteComponent() {
 
+  const [open, setOpen] = useState(false)
   const createProjectType = useMutation(api.project_types.createProjectType)
   const projectTypes = useQuery(api.project_types.listProjectTypes) ?? []
 
@@ -39,6 +42,12 @@ function RouteComponent() {
     onSubmit: async ({ value }) => {
       const id = createProjectType({name: value.name})
 
+      if (!id) {
+        toast.error("Failed to create project type")
+        return
+      }
+
+      setOpen(false)
       toast("Type created successfully: " + id, {
         position: "top-right",
         classNames: {
@@ -56,22 +65,19 @@ function RouteComponent() {
 
 
     <Dialog
-    
+    open={open}
+    onOpenChange={setOpen}
     >
-      <form>
         <DialogTrigger asChild>
-          <Button variant="outline">Add Type</Button>
+          <Button variant="outline" className='w-23 flex items-center cursor-pointer px-2'>Add New <Plus /></Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle>Add a new Project Type</DialogTitle>
-            {/* <DialogDescription>
-              Make changes to your profile here. Click save when you&apos;re
-              done.
-            </DialogDescription> */}
+            <DialogTitle className='text-center'>Add a new Project Type</DialogTitle>
+
           </DialogHeader>
 
-   <form
+        <form
           id="project-type-form"
           onSubmit={(e) => {
             e.preventDefault()
@@ -111,22 +117,19 @@ function RouteComponent() {
         </form>
 
     
-          <DialogFooter>
-            
-
- <Field orientation="horizontal">
-  <DialogClose asChild>
-              <Button variant="outline" onClick={() => form.reset()}>Cancel</Button>
-            </DialogClose>
-         
-          <Button type="submit" form="project-type-form">
-            Submit
-          </Button>
-        </Field>
-
+          <DialogFooter >
+          <Field orientation="horizontal"  className="justify-end gap-2">
+              <DialogClose asChild>
+                <Button variant="outline" onClick={() => form.reset()}>Cancel</Button>
+              </DialogClose>
+              <Button type="submit" form="project-type-form">
+                {
+                  form.state.isSubmitting ? "Creating..." : "Submit"
+                }
+              </Button>
+          </Field>
           </DialogFooter>
         </DialogContent>
-      </form>
     </Dialog>
     
     <Table>
