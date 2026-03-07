@@ -3,11 +3,15 @@ import { createFileRoute } from '@tanstack/react-router'
 import { api } from 'convex/_generated/api'
 import type { Id } from 'convex/_generated/dataModel'
 import { useMutation, useQuery } from 'convex/react'
-import { Folder, Loader, Plus } from 'lucide-react'
+import { Archive, CheckCircleIcon, EllipsisVertical, Eye, Folder, Loader, Loader2, PenLine, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { set, type record } from 'zod'
+import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '~/components/ui/card'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/ui/dialog'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '~/components/ui/dropdown-menu'
 import {
   Empty,
   EmptyContent,
@@ -32,12 +36,11 @@ function RouteComponent() {
   const projects = useQuery(api.projects.listProjects)
   const projectTypes = useQuery(api.project_types.listProjectTypes)
 
+  const setProjectStatus = useMutation(api.projects.setProjectStatus)
+
+  const [status, setStatus] = useState(false)
+
   const dateFormatter = new Intl.DateTimeFormat("en-US", {
-    // year: "numeric",
-    // month: "short",
-    // day: "numeric",
-    // hour: "2-digit",
-    // minute: "2-digit",
     dateStyle: "medium",
     timeStyle: "medium",
     
@@ -63,6 +66,8 @@ function RouteComponent() {
       }
 
       const id = await createProject(data)
+
+      console.log(id)
 
       if (!id) {
         toast.error("Failed to create project")
@@ -161,22 +166,11 @@ function RouteComponent() {
                                   <SelectItem key={type._id} value={type._id}>{type.name}</SelectItem>
                                 ))
                               }
-                              {/* <SelectItem value="apple">Apple</SelectItem>
-                              <SelectItem value="banana">Banana</SelectItem>
-                              <SelectItem value="blueberry">Blueberry</SelectItem> */}
+                            
                             </SelectGroup>
                           </SelectContent>
                         </Select>
-                        {/* <Textarea
-                          id={field.name}
-                          name={field.name}
-                          value={field.state.value}
-                          onBlur={field.handleBlur}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          aria-invalid={isInvalid}
-                          placeholder="your project description"
-                          autoComplete="off"
-                        /> */}
+                       
                         {isInvalid && (
                           <FieldError errors={field.state.meta.errors} />
                         )}
@@ -213,7 +207,6 @@ function RouteComponent() {
                   }}
                 />
               </FieldGroup>
-            </form>
               <DialogFooter >
               <Field orientation="horizontal"  className="justify-end gap-2">
                   <DialogClose asChild>
@@ -226,6 +219,8 @@ function RouteComponent() {
                   </Button>
               </Field>
               </DialogFooter>
+            </form>
+
             </DialogContent>
         </Dialog>
       )
@@ -256,25 +251,82 @@ function RouteComponent() {
           <Button onClick={() => setOpen(true)}>Create Project</Button>
         </EmptyContent>
       </Empty>
-                )
+      )
     }
 
     {
       projects && projects.length > 0 && (
         <>
-       <h1 className='text-2xl font-bold text-center'>Projects</h1>
+       {/* <h1 className='text-2xl font-bold text-center'>Projects</h1> */}
         <Button variant="default" onClick={() => setOpen(true)} className='w-23 flex items-center cursor-pointer px-2'>Add New</Button>
-               <div className='flex gap-5 mt-5'>
+               <div className='flex flex-wrap gap-5 mt-5'>
 
           {projects.map((project) => (
-            <div className='h-50 w-70 shadow-md rounded-md p-3 mb-2 border' key={project._id}>
 
-              <p className='font-semibold text-2xl'>{project.name}</p>
-               <p className="line-clamp-2">{project.description}</p>
-              <p className="">Type: {project.type}</p>
-              <p className="">Created At: {dateFormatter.format(project._creationTime)}</p>
+            <Card className="relative w-70 max-w-70 pt-0 h-40 p-1" key={project._id}>
+         
+              <CardHeader className='pt-4'>
+                <CardAction >
+                  <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <EllipsisVertical className="text-center ml-3 cursor-pointer" />
+                            </DropdownMenuTrigger>
 
-            </div>
+                            <DropdownMenuContent>
+                              <DropdownMenuItem
+                                // onClick={() => setIsViewDetailsOpen(true)}
+                                className="flex gap-2 items-center  cursor-pointer"
+                              >
+                                <PenLine className="size-3 " />
+                                View
+                              </DropdownMenuItem>
+
+                               <DropdownMenuItem
+                                 onClick={async () =>{
+
+                                  setStatus(true)
+
+                                const response = await setProjectStatus({
+                                  projectId: project._id,
+                                  status: "archived"
+                                 })
+
+                                 setStatus(false)
+                                 console.log(response)
+
+                                 } 
+                                }
+                                className="flex gap-2 items-center  cursor-pointer"
+                              >
+                                {/* <Loader2 /> */}
+                                {
+                                
+                                  status === false ? <span><Archive className="size-3 text-sm" />Archive</span> : <span><Loader2 className="size-3 text-sm spin" />Archiving</span>
+                                }
+                              </DropdownMenuItem>
+                              
+                            </DropdownMenuContent>
+                  </DropdownMenu>
+ 
+                  
+                  {/* <Badge variant={"secondary"}>{project.status}</Badge> */}
+                </CardAction>
+                <CardTitle>{project.name}</CardTitle>
+                <CardDescription className='line-clamp-2'>
+                 {project.description}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className='text-xs text-gray-700 absolute bottom-4'>
+                <span>
+                  Status: <Badge className={project.status === "active" ?`bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300` : "bg-gray-500 text-white" } variant={"secondary"}>
+                      {project.status}
+                    </Badge>
+                </span>
+                  
+                <p className="">Type: {project.type}</p>
+                <p className="">Created At: {dateFormatter.format(project._creationTime)}</p>
+              </CardContent>
+            </Card>
           ))}
         </div>
         </>

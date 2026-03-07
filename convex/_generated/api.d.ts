@@ -8,7 +8,6 @@
  * @module
  */
 
-import type * as myFunctions from "../myFunctions.js";
 import type * as project_types from "../project_types.js";
 import type * as projects from "../projects.js";
 
@@ -19,7 +18,6 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
-  myFunctions: typeof myFunctions;
   project_types: typeof project_types;
   projects: typeof projects;
 }>;

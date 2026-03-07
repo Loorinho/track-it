@@ -17,6 +17,18 @@ export const listProjects = query({
   },
 })
 
+export const setProjectStatus = mutation({
+  args: {
+    projectId: v.id('projects'),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.patch(args.projectId, {
+      status: args.status,
+    })
+  },
+})
+
 export const createProject = mutation({
   args: {
     name: v.string(),
@@ -27,9 +39,12 @@ export const createProject = mutation({
     const id = await ctx.db.insert('projects', {
       name: args.name,
       type: args.type,
+      status: 'active',
       description: args.description,
     })
 
-    console.log('Added new project with id:', id)
+    return id
+
+    // console.log('Added new project with id:', id)
   },
 })
