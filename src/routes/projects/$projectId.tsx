@@ -283,15 +283,31 @@ function RouteComponent() {
 
           
             <SheetFooter className='flex'>
-              <Button type="submit" form='project-task-form'
+              <form.Subscribe
+              selector={(state) => [state.isSubmitting, state.canSubmit] }
+              children={([isSubmitting, canSubmit]) => (
+                <Button type="submit" form='project-task-form'
+                className='cursor-pointer'
+                  // disabled={isSubmitting || !canSubmit}
+                >
+                  {
+                    isSubmitting ? "Saving..." : "Save Task"
+                  }
+                  {/* Save changes */}
+                  </Button>
+              )}
+
+              >
+
+              </form.Subscribe>
+              {/* <Button type="submit" form='project-task-form'
               className='cursor-pointer'
                 disabled={form.state.isSubmitting}
               >
                 {
                   form.state.isSubmitting ? "Saving..." : "Save Task"
                 }
-                {/* Save changes */}
-                </Button>
+                </Button> */}
               <SheetClose asChild>
                 <Button variant="outline" className='cursor-pointer' onClick={() => form.reset()}>Close</Button>
               </SheetClose>
