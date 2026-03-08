@@ -16,4 +16,10 @@ export default defineSchema({
     status: v.optional(v.string()),
     description: v.string(),
   }).index('type', ['type']),
+  tasks: defineTable({
+    name: v.string(),
+    projectId: v.id('projects'),
+    description: v.string(),
+    status: v.string(),
+  }).index('projectId', ['projectId']),
 })

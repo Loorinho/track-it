@@ -1,5 +1,5 @@
 import {  useForm } from '@tanstack/react-form'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { api } from 'convex/_generated/api'
 import type { Id } from 'convex/_generated/dataModel'
 import { useMutation, useQuery } from 'convex/react'
@@ -11,7 +11,7 @@ import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '~/components/ui/card'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/ui/dialog'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '~/components/ui/dropdown-menu'
+
 import {
   Empty,
   EmptyContent,
@@ -259,64 +259,29 @@ function RouteComponent() {
         <>
        {/* <h1 className='text-2xl font-bold text-center'>Projects</h1> */}
         <Button variant="default" onClick={() => setOpen(true)} className='w-23 flex items-center cursor-pointer px-2'>Add New</Button>
-               <div className='flex flex-wrap gap-5 mt-5'>
+          <div className='flex flex-wrap gap-5 mt-5'>
 
           {projects.map((project) => (
 
-            <Card className="relative w-70 max-w-70 pt-0 h-40 p-1" key={project._id}>
+            <Link to={`/projects/$projectId`}
+             params={{
+              projectId: project._id
+             }}
+             key={project._id}
+            className="w-70 max-w-70 hover:scale-[1.02] transition-transform duration-200">
+
+            <Card className="relative w-70 max-w-70 pt-0 h-40 p-1">
          
               <CardHeader className='pt-4'>
                 <CardAction >
-                  <DropdownMenu>
-                      <DropdownMenuTrigger>
-                        <EllipsisVertical className="text-center ml-3 cursor-pointer" />
-                            </DropdownMenuTrigger>
-
-                            <DropdownMenuContent>
-                              <DropdownMenuItem
-                                // onClick={() => setIsViewDetailsOpen(true)}
-                                className="flex gap-2 items-center  cursor-pointer"
-                              >
-                                <PenLine className="size-3 " />
-                                View
-                              </DropdownMenuItem>
-
-                               <DropdownMenuItem
-                                 onClick={async () =>{
-
-                                  setStatus(true)
-
-                                const response = await setProjectStatus({
-                                  projectId: project._id,
-                                  status: "archived"
-                                 })
-
-                                 setStatus(false)
-                                 console.log(response)
-
-                                 } 
-                                }
-                                className="flex gap-2 items-center  cursor-pointer"
-                              >
-                                {/* <Loader2 /> */}
-                                {
-                                
-                                  status === false ? <span><Archive className="size-3 text-sm" />Archive</span> : <span><Loader2 className="size-3 text-sm spin" />Archiving</span>
-                                }
-                              </DropdownMenuItem>
-                              
-                            </DropdownMenuContent>
-                  </DropdownMenu>
- 
-                  
-                  {/* <Badge variant={"secondary"}>{project.status}</Badge> */}
+             
                 </CardAction>
                 <CardTitle>{project.name}</CardTitle>
                 <CardDescription className='line-clamp-2'>
                  {project.description}
                 </CardDescription>
               </CardHeader>
-              <CardContent className='text-xs text-gray-700 absolute bottom-4'>
+              <CardContent className='text-xs text-gray-700 dark:text-gray-400 absolute bottom-4'>
                 <span>
                   Status: <Badge className={project.status === "active" ?`bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300` : "bg-gray-500 text-white" } variant={"secondary"}>
                       {project.status}
@@ -327,6 +292,7 @@ function RouteComponent() {
                 <p className="">Created At: {dateFormatter.format(project._creationTime)}</p>
               </CardContent>
             </Card>
+            </Link>
           ))}
         </div>
         </>

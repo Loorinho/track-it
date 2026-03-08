@@ -11,3 +11,10 @@ export const createProjectSchema = z.object({
     .string()
     .min(5, 'Project description must be at least 5 characters.'),
 })
+
+export const createTaskSchema = z.object({
+  name: z.string().min(5, 'task must be at least 5 characters.'),
+  description: z
+    .string()
+    .min(5, 'task description must be at least 5 characters.'),
+})

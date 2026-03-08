@@ -10,6 +10,7 @@
 
 import type * as project_types from "../project_types.js";
 import type * as projects from "../projects.js";
+import type * as tasks from "../tasks.js";
 
 import type {
   ApiFromModules,
@@ -20,6 +21,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   project_types: typeof project_types;
   projects: typeof projects;
+  tasks: typeof tasks;
 }>;
 
 /**

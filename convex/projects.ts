@@ -1,5 +1,35 @@
 import { v } from 'convex/values'
 import { mutation, query } from './_generated/server'
+import { Id } from './_generated/dataModel'
+
+export const getProjectDetails = query({
+  args: {
+    projectId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const project = await ctx.db.get(args.projectId as Id<'projects'>)
+
+    // console.log('Project from db', project)
+
+    if (!project) {
+      throw new Error('Project not found')
+
+      // return {
+      //   message: 'Project not found',
+      //   data: {},
+      // }
+    }
+
+    const projectType = await ctx.db.get(project.type)
+
+    return {
+      ...project,
+      type: projectType?.name,
+    }
+  },
+})
+
+// export type Project = Awaited<ReturnType<typeof getProjectDetails.isQuery>>
 
 export const listProjects = query({
   handler: async (ctx) => {
