@@ -3,13 +3,13 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { api } from 'convex/_generated/api'
 import type { Id } from 'convex/_generated/dataModel'
 import { useMutation, useQuery } from 'convex/react'
-import { Archive, CheckCircleIcon, EllipsisVertical, Eye, Folder, Loader, Loader2, PenLine, Plus } from 'lucide-react'
+import { Folder, Loader } from 'lucide-react'
+
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { set, type record } from 'zod'
-import { Badge } from '~/components/ui/badge'
+import ProjectCard from '~/components/project-card'
 import { Button } from '~/components/ui/button'
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '~/components/ui/card'
+
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/ui/dialog'
 
 import {
@@ -22,7 +22,6 @@ import {
 } from "~/components/ui/empty"
 import { FieldGroup, FieldLabel, FieldError, Field } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
-import { Progress } from '~/components/ui/progress'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
 import { Textarea } from '~/components/ui/textarea'
 import { createProjectSchema } from '~/schemas/schema'
@@ -33,20 +32,21 @@ export const Route = createFileRoute('/projects/')({
 
 function RouteComponent() {
   const [open, setOpen] = useState(false)
+  // const [searchTerm, setSearchTerm] = useState("");
   const createProject = useMutation(api.projects.createProject)
   const projects = useQuery(api.projects.listProjects)
   const projectTypes = useQuery(api.project_types.listProjectTypes)
 
-  const setProjectStatus = useMutation(api.projects.setProjectStatus)
+  // const setProjectStatus = useMutation(api.projects.setProjectStatus)
 
-  const [status, setStatus] = useState(false)
+  // const [status, setStatus] = useState(false)
 
-  const dateFormatter = new Intl.DateTimeFormat("en-US", {
-    dateStyle: "medium",
-    timeStyle: "medium",
-    
 
-  })
+  //  const filteredProjects = projects?.filter(
+  //   (project) =>
+  //     project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     project.description.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
 
     const form = useForm({
@@ -86,9 +86,6 @@ function RouteComponent() {
 
 
   return <div className='mx-10 my-3 h-screen'>
-
-     
-
     {
       projects && open && (
         <Dialog
@@ -262,6 +259,13 @@ function RouteComponent() {
         <Button variant="default" onClick={() => setOpen(true)} className='w-23 flex items-center cursor-pointer px-2'>Add New</Button>
           <div className='flex flex-wrap gap-5 mt-5'>
 
+            {/* <Input
+              placeholder="Search records by patient name"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="px-2 py-1 border border-gray-300 rounded-md w-full mt-5"
+            /> */}
+
           {projects.map((project) => (
 
             <Link to={`/projects/$projectId`}
@@ -271,32 +275,7 @@ function RouteComponent() {
              key={project._id}
             className="w-70 max-w-70 hover:scale-[1.02] transition-transform duration-200">
 
-            <Card className="relative w-70 max-w-70 pt-0 h-40 p-1">
-         
-              <CardHeader className='pt-4'>
-                <CardAction >
-             
-                </CardAction>
-                <CardTitle>{project.name}</CardTitle>
-                <CardDescription className='line-clamp-2'>
-                 {project.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className='text-xs text-gray-700 dark:text-gray-400 absolute bottom-4'>
-                <span>
-                  Status: <Badge className={project.status === "active" ?`bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300` : "bg-gray-500 text-white" } variant={"secondary"}>
-                      {project.status}
-                    </Badge>
-                </span>
-                  
-                <p className="">Type: {project.type}</p>
-                <p className="">Created At: {dateFormatter.format(project._creationTime)}</p>
-              </CardContent>
-
-              <CardFooter>
-                {/* {<Progress value={project.progress} className="w-full" /> */} 
-              </CardFooter>
-            </Card>
+              <ProjectCard project={project} />
             </Link>
           ))}
         </div>

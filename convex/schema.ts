@@ -19,7 +19,10 @@ export default defineSchema({
   tasks: defineTable({
     name: v.string(),
     projectId: v.id('projects'),
+    priority: v.string(),
     description: v.string(),
     status: v.string(),
   }).index('projectId', ['projectId']),
 })
+
+

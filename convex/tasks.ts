@@ -2,6 +2,18 @@ import { v } from 'convex/values'
 import { mutation, query } from './_generated/server'
 
 
+export const updateTaskStatus = mutation({
+  args: {
+    taskId: v.id('tasks'),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.taskId, {
+      status: args.status,
+    })
+  },
+})
+
 export const getProjectProgress =  query({
   args: {
     projectId: v.id('projects'),
@@ -37,6 +49,7 @@ export const createProjectTask = mutation({
   args: {
     name: v.string(),
     description: v.string(),
+    priority: v.string(),
     projectId: v.id('projects'),
   },
   handler: async (ctx, args) => {
@@ -45,6 +58,8 @@ export const createProjectTask = mutation({
       projectId: args.projectId,
       description: args.description,
       status: 'pending',
+      priority: args.priority,
+
     })
     return taskId
   },
