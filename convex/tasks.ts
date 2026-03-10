@@ -8,9 +8,20 @@ export const updateTaskStatus = mutation({
     status: v.string(),
   },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.taskId, {
+    return await ctx.db.patch(args.taskId, {
       status: args.status,
     })
+  },
+})
+
+
+export const deleteTask = mutation({
+  args: {
+    taskId: v.id('tasks'),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.taskId)
+    return true
   },
 })
 

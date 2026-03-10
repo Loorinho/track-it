@@ -1,16 +1,22 @@
-import type { Doc } from 'convex/_generated/dataModel'
-import { EllipsisVertical } from 'lucide-react'
+import type { Doc, Id } from 'convex/_generated/dataModel'
+import { EllipsisVertical, Trash, Trash2Icon } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { Button } from './ui/button'
 import { useState } from 'react'
 import { api } from 'convex/_generated/api'
 import { useMutation } from 'convex/react'
+import { toast } from 'sonner'
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog'
+import { set } from 'zod'
 
 function TaskItem({task}: {task: Doc<"tasks">}) {
 
     const [openDropdown, setOpenDropdown] = useState(false)
+    const [deleteOpen, setDeleteOpen] = useState(false)
+    const [taskToDelete, setTaskToDelete] = useState<string>("")
 
     const updateTaskStatus = useMutation(api.tasks.updateTaskStatus)
+    const deleteTask = useMutation(api.tasks.deleteTask)
 
   return (
     <div key={task._id} className="p-4 border rounded-md my-2">
@@ -42,10 +48,14 @@ function TaskItem({task}: {task: Doc<"tasks">}) {
             <DropdownMenuSubTrigger>Mark As</DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem onClick={() => {
-                    updateTaskStatus({
+                <DropdownMenuItem onClick={async() => {
+                   const response = await updateTaskStatus({
                         taskId: task._id,
                         status: "in-progress"
+                    })
+
+                    toast.success("Task marked as In-Progress" , {
+                        position: "top-right",
                     })
                 }}>In Progress</DropdownMenuItem>
                 <DropdownMenuItem
@@ -54,6 +64,10 @@ function TaskItem({task}: {task: Doc<"tasks">}) {
                         taskId: task._id,
                         status: "completed"
                     })
+
+                     toast.success("Task marked as Completed" , {
+                        position: "top-right",
+                    })
                 }}
                 >Completed</DropdownMenuItem>
                 <DropdownMenuItem
@@ -61,6 +75,10 @@ function TaskItem({task}: {task: Doc<"tasks">}) {
                     updateTaskStatus({
                         taskId: task._id,
                         status: "archived"
+                    })
+
+                     toast.success("Task marked as Archived" , {
+                        position: "top-right",
                     })
                 }}
                 >Archived</DropdownMenuItem>
@@ -72,17 +90,50 @@ function TaskItem({task}: {task: Doc<"tasks">}) {
         
         </DropdownMenuGroup>
 
-         
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+          <DropdownMenuItem variant="destructive" onClick={() => {
+            setTaskToDelete(task._id)
+            setDeleteOpen(true)
+            }}>Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
         </div>
         <p className="text-sm text-muted-foreground">{task.description}</p>
 
 
-
-        
+        <AlertDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        >
+      <AlertDialogTrigger asChild>
+        {/* <Button variant="destructive">Delete Chat</Button> */}
+      </AlertDialogTrigger>
+      <AlertDialogContent size="sm">
+        <AlertDialogHeader>
+            {/* <AlertDialogMedia>
+            <Trash />
+          </AlertDialogMedia> */}
+          {/* <AlertDialogMedia className="bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive">
+            <Trash2Icon  />
+          </AlertDialogMedia> */}
+          <AlertDialogTitle>Delete Task?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This will permanently delete this task from your project. Are you sure you want to proceed? 
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel variant="outline">Cancel</AlertDialogCancel>
+          <AlertDialogAction variant="destructive" onClick={() => {
+            deleteTask({taskId: taskToDelete as Id<"tasks">})
+            setDeleteOpen(false)
+            setTaskToDelete("")
+             toast.success("Task deleted successfully" , {
+                        position: "top-right",
+            })
+          }}>Yes, Delete</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
     </div>
   )
 }
