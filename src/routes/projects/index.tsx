@@ -22,6 +22,7 @@ import {
 } from "~/components/ui/empty"
 import { FieldGroup, FieldLabel, FieldError, Field } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
+import { Progress } from '~/components/ui/progress'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
 import { Textarea } from '~/components/ui/textarea'
 import { createProjectSchema } from '~/schemas/schema'
@@ -90,7 +91,7 @@ function RouteComponent() {
 
     {
       projects && open && (
-           <Dialog
+        <Dialog
         open={open}
         onOpenChange={setOpen}
         >
@@ -291,6 +292,10 @@ function RouteComponent() {
                 <p className="">Type: {project.type}</p>
                 <p className="">Created At: {dateFormatter.format(project._creationTime)}</p>
               </CardContent>
+
+              <CardFooter>
+                {/* {<Progress value={project.progress} className="w-full" /> */} 
+              </CardFooter>
             </Card>
             </Link>
           ))}

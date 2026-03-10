@@ -20,6 +20,7 @@ import { createTaskSchema } from '~/schemas/schema'
 import { toast } from 'sonner'
 import { Field, FieldError, FieldGroup, FieldLabel } from '~/components/ui/field'
 import { Textarea } from '~/components/ui/textarea'
+import { Progress } from '~/components/ui/progress'
 
 export const Route = createFileRoute('/projects/$projectId')({
   component: RouteComponent,
@@ -39,6 +40,10 @@ function RouteComponent() {
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const createTask = useMutation(api.tasks.createProjectTask)
+
+  const projectProgress = useQuery(api.tasks.getProjectProgress, {
+    projectId: projectId as Id<'projects'>,
+  })
 
 
   const project = useQuery(api.projects.getProjectDetails, {
@@ -84,9 +89,7 @@ function RouteComponent() {
 
   // console.log('project', project)
   
-  return <section className='h-screen mx-10 my-5'>
-
-   
+  return <section className='min-h-screen mx-10 my-5'>
 
     <Link to="/projects" className='flex items-center mb-2 w-28'> <ArrowLeft className='size-5' /> Back Home</Link>
 
@@ -138,9 +141,19 @@ function RouteComponent() {
                             
                           </DropdownMenuContent>
         </DropdownMenu>
-  </div>
+       </div>
 
-   <p className=''>{project.description}</p>
+      <p className=''>{project.description}</p>
+
+      <Field className="w-full mt-4">
+      <FieldLabel htmlFor="progress-upload" className='mb-0'>
+        <span>Progress</span>
+        <span className="ml-auto">{projectProgress}%</span>
+      </FieldLabel>
+      <Progress value={Number(projectProgress)} className='h-3' id="progress-upload" />
+    </Field>
+
+      {/* <Progress value={projectProgress} className="w-full mt-4" /> */}
 
   <Tabs defaultValue="tasks" className="w-full mt-4">
   <TabsList className='grid grid-cols-3 w-full '>
@@ -188,15 +201,18 @@ function RouteComponent() {
           <>
           <Button onClick={() => setSheetOpen(true)} className='cursor-pointer mt-2'>Add New</Button>
 
-            <div className="grid gap-3 my-3">
+          
+             <div className="grid gap-3 my-3">
 
                 {projectTasks.map((task) => (
+          
                   <div key={task._id} className="p-4 border rounded-md">
                     <p className="font-medium">{task.name}</p>
                     <p className="text-sm text-muted-foreground">{task.status}</p>
                   </div>
                 ))}
             </div>
+           
                 </>
         )
     }

@@ -40,6 +40,31 @@ export const listProjects = query({
       projectTypes.map((projectType) => [projectType._id, projectType]),
     )
 
+    // add a field for tasks progress, which is the percentage of completed tasks for the project
+
+    // const projectsWithProgress = await Promise.all(
+    //   projects.map(async (project) => {
+    //     const tasks = await ctx.db
+    //       .query('tasks')
+    //       .withIndex('projectId', (q) => q.eq('projectId', project._id))
+    //       .collect()
+
+    //       console.log(tasks)
+
+    //     const completedTasks = tasks.filter((task) => task.status === 'completed')
+    //     const progress =
+    //       tasks.length > 0 ? (completedTasks.length / tasks.length) * 100 : 0
+
+    //     return {
+    //       ...project,
+    //       progress,
+    //     }
+    //   }),
+    // )
+
+    // console.log('Projects with progress', projectsWithProgress)
+    
+
     return projects.map((project) => ({
       ...project,
       type: projectTypeById.get(project.type)?.name,

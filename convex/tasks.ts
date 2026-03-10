@@ -1,6 +1,24 @@
 import { v } from 'convex/values'
 import { mutation, query } from './_generated/server'
 
+
+export const getProjectProgress =  query({
+  args: {
+    projectId: v.id('projects'),
+  },
+  handler: async (ctx, args) => {
+    const tasks = await ctx.db
+      .query('tasks')
+      .withIndex('projectId', (q) => q.eq('projectId', args.projectId))
+      .collect()
+
+    const completedTasks = tasks.filter((task) => task.status === 'completed')
+    const progress = (tasks.length > 0 ? (completedTasks.length / tasks.length) * 100 : 0).toFixed(2)
+
+
+      return progress
+  },
+})
 export const listProjectTasks = query({
   args: {
     projectId: v.id('projects'),
@@ -11,7 +29,7 @@ export const listProjectTasks = query({
       .withIndex('projectId', (q) => q.eq('projectId', args.projectId))
       .collect()
 
-    return tasks
+      return tasks
   },
 })
 
@@ -26,7 +44,7 @@ export const createProjectTask = mutation({
       name: args.name,
       projectId: args.projectId,
       description: args.description,
-      status: 'active',
+      status: 'pending',
     })
     return taskId
   },
