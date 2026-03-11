@@ -18,6 +18,8 @@ function RouteComponent() {
           <div className='flex gap-3 items-center'>
                 <Link to="/projects">Projects</Link>
              <Link to="/projects/types">Project Types</Link>
+             <Link to="/projects/label">Labels</Link>
+
           </div>
            <div className='flex items-center gap-5'>
         

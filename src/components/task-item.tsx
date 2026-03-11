@@ -1,13 +1,12 @@
 import type { Doc, Id } from 'convex/_generated/dataModel'
-import { EllipsisVertical, Trash, Trash2Icon } from 'lucide-react'
+import { EllipsisVertical } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { Button } from './ui/button'
 import { useState } from 'react'
 import { api } from 'convex/_generated/api'
 import { useMutation } from 'convex/react'
 import { toast } from 'sonner'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog'
-import { set } from 'zod'
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog'
 
 function TaskItem({task}: {task: Doc<"tasks">}) {
 
@@ -49,7 +48,17 @@ function TaskItem({task}: {task: Doc<"tasks">}) {
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuItem onClick={async() => {
-                   const response = await updateTaskStatus({
+                        await updateTaskStatus({
+                        taskId: task._id,
+                        status: "pending"
+                    })
+
+                    toast.success("Task put back in the backlog" , {
+                        position: "top-right",
+                    })
+                }}>Backlog</DropdownMenuItem>
+                <DropdownMenuItem onClick={async() => {
+                        await updateTaskStatus({
                         taskId: task._id,
                         status: "in-progress"
                     })

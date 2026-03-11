@@ -1,14 +1,8 @@
 import type { Doc } from 'convex/_generated/dataModel'
 import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card'
+import { dateFormatter } from '~/lib/helpers'
 
 export default function ProjectCard({project}: {project: Doc<"projects">} ) {
-
-
-  const dateFormatter = new Intl.DateTimeFormat("en-UG", {
-    dateStyle: "medium",
-    timeStyle: "medium",
-  })
-
 
   return (
                 <Card className="@container/card w-72 max-w-70 pt-0 h-45 px-1 py-4">

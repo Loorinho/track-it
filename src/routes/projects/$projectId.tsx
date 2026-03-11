@@ -1,10 +1,8 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { createServerFn } from '@tanstack/react-start'
 import { api } from 'convex/_generated/api'
 import type { Id } from 'convex/_generated/dataModel'
 import { useMutation, useQuery } from 'convex/react'
-import { ArrowBigLeft, ArrowLeft, EllipsisVertical, ListTodo, Plus } from 'lucide-react'
+import { ArrowLeft, EllipsisVertical, ListTodo, Plus } from 'lucide-react'
 import { Skeleton } from '~/components/ui/skeleton'
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '~/components/ui/dropdown-menu'
@@ -201,7 +199,7 @@ function RouteComponent() {
           projectTasks && projectTasks.length > 0 && (
 
             <>
-              <Button onClick={() => setSheetOpen(true)} className='cursor-pointer mt-2'>Add New</Button>
+              {/* <Button onClick={() => setSheetOpen(true)} className='cursor-pointer mt-2'>Add New</Button> */}
 
               <div className="grid grid-cols-3 gap-3 my-3 scroll-x-auto">
                 <div className='max-h-200 border rounded-md p-4 scroll-auto'>
@@ -282,8 +280,6 @@ function RouteComponent() {
             />
             
           </FieldGroup>
-
-            
               <FieldGroup>
               <form.Field
                 name="priority"
@@ -355,7 +351,7 @@ function RouteComponent() {
           <SheetFooter className='flex'>
             <form.Subscribe
             selector={(state) => [state.isSubmitting, state.canSubmit] }
-            children={([isSubmitting, canSubmit]) => (
+            children={([isSubmitting]) => (
               <Button type="submit" form='project-task-form'
               className='cursor-pointer'
                 // disabled={isSubmitting || !canSubmit}
@@ -370,14 +366,6 @@ function RouteComponent() {
             >
 
             </form.Subscribe>
-            {/* <Button type="submit" form='project-task-form'
-            className='cursor-pointer'
-              disabled={form.state.isSubmitting}
-            >
-              {
-                form.state.isSubmitting ? "Saving..." : "Save Task"
-              }
-              </Button> */}
             <SheetClose asChild>
               <Button variant="outline" className='cursor-pointer' onClick={() => form.reset()}>Close</Button>
             </SheetClose>

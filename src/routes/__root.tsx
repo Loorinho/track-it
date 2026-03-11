@@ -67,7 +67,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className='bg-background'>
           <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
             
         {children}

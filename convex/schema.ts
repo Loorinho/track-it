@@ -21,8 +21,13 @@ export default defineSchema({
     projectId: v.id('projects'),
     priority: v.string(),
     description: v.string(),
+    label: v.optional(v.id('labels')),
     status: v.string(),
   }).index('projectId', ['projectId']),
+  labels: defineTable({
+    name: v.string(),
+    color: v.string()
+  }).index('name', ['name']),
 })
 
 

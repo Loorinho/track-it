@@ -18,7 +18,7 @@ import {
   TableRow,
 } from "~/components/ui/table"
 import { useState } from 'react'
-import { Loader, Loader2, Plus } from 'lucide-react'
+import { Loader, Plus } from 'lucide-react'
 
 
 export const Route = createFileRoute('/projects/types')({
