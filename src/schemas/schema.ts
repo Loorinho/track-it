@@ -15,6 +15,7 @@ export const createProjectSchema = z.object({
 export const createTaskSchema = z.object({
   name: z.string().min(5, 'task must be at least 5 characters.'),
   priority: z.string().min(1, 'Task priority is required.'),
+  label: z.string().min(1, 'Task label is required.'),
   description: z
     .string()
     .min(5, 'task description must be at least 5 characters.'),

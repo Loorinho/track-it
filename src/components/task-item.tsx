@@ -4,11 +4,20 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Button } from './ui/button'
 import { useState } from 'react'
 import { api } from 'convex/_generated/api'
-import { useMutation } from 'convex/react'
+import { useMutation, useQuery } from 'convex/react'
 import { toast } from 'sonner'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog'
+import { Badge } from './ui/badge'
 
 function TaskItem({task}: {task: Doc<"tasks">}) {
+
+
+    const taskLabel = useQuery(api.tasks.getLabelForTask, {
+        labelId: task.label
+    })
+
+  console.log("Task Label: ", taskLabel)
+
 
     const [openDropdown, setOpenDropdown] = useState(false)
     const [deleteOpen, setDeleteOpen] = useState(false)
@@ -20,7 +29,22 @@ function TaskItem({task}: {task: Doc<"tasks">}) {
   return (
     <div key={task._id} className="p-4 border rounded-md my-2">
         <div className='flex items-start justify-between'>
-            <p className="font-medium">{task.name}</p>
+            <p className="font-medium flex items-center gap-2">
+              <span className='inline-block'>
+                {task.name}
+                </span>
+{/* 
+                  {taskLabel && taskLabel.name && (
+                      <span className='inline-block px-2 h-5 text-xs rounded-sm text-white text-center' style={{backgroundColor: taskLabel.color, opacity: 0.9}}>
+                          {taskLabel.name}
+                      </span>
+                  )} */}
+
+                  <Badge variant="outline" className='text-xs'>
+                    {taskLabel?.name}
+                  </Badge>
+
+            </p>
 
         <DropdownMenu
         open={openDropdown}
@@ -108,6 +132,8 @@ function TaskItem({task}: {task: Doc<"tasks">}) {
       </DropdownMenu>
         </div>
         <p className="text-sm text-muted-foreground">{task.description}</p>
+
+      
 
 
         <AlertDialog

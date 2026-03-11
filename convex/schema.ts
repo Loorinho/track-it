@@ -21,7 +21,7 @@ export default defineSchema({
     projectId: v.id('projects'),
     priority: v.string(),
     description: v.string(),
-    label: v.optional(v.id('labels')),
+    label: v.id('labels'),
     status: v.string(),
   }).index('projectId', ['projectId']),
   labels: defineTable({

@@ -21,7 +21,6 @@ import {
   TableRow,
 } from "~/components/ui/table"
 import { dateFormatter } from '~/lib/helpers'
-import { Badge } from '~/components/ui/badge'
 
 export const Route = createFileRoute('/projects/label')({
   component: RouteComponent,

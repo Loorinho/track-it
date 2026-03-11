@@ -2,7 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { api } from 'convex/_generated/api'
 import type { Id } from 'convex/_generated/dataModel'
 import { useMutation, useQuery } from 'convex/react'
-import { ArrowLeft, EllipsisVertical, ListTodo, Plus } from 'lucide-react'
+import { ArrowLeft, EllipsisVertical, ListTodo, Plus, Trash2 } from 'lucide-react'
 import { Skeleton } from '~/components/ui/skeleton'
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '~/components/ui/dropdown-menu'
@@ -20,6 +20,7 @@ import { Textarea } from '~/components/ui/textarea'
 import { Progress } from '~/components/ui/progress'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
 import TaskItem from '~/components/task-item'
+import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '~/components/ui/item'
 
 export const Route = createFileRoute('/projects/$projectId')({
   component: RouteComponent,
@@ -39,6 +40,8 @@ function RouteComponent() {
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const taskPriorities: string[] = ['Low', 'Medium', 'High']
+
+  const taskLabels = useQuery(api.labels.listLabels)
 
   const createTask = useMutation(api.tasks.createProjectTask)
 
@@ -62,6 +65,7 @@ function RouteComponent() {
       defaultValues: {
         name: "",
         description: "",
+        label: "",
         priority: "",
 
       },
@@ -74,6 +78,7 @@ function RouteComponent() {
           name: value.name,
           description: value.description,
           priority: value.priority,
+          label: value.label as Id<'labels'>,
           projectId: projectId as Id<'projects'>,
         }
   
@@ -302,6 +307,51 @@ function RouteComponent() {
                             {
                                 taskPriorities.map((type) => (
                                 <SelectItem key={type} value={type}>{type}</SelectItem>
+                              ))
+                            }
+                          
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                  )
+                }}
+              />
+            </FieldGroup>
+
+             <FieldGroup>
+              <form.Field
+                name="label"
+                children={(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid
+                  return (
+                    <Field data-invalid={isInvalid} className='gap-0'>
+                      <FieldLabel htmlFor={field.name}>Label</FieldLabel>
+                        <Select onValueChange={(value) => field.handleChange(value)} 
+                        value={field.state.value}
+                        >
+                        <SelectTrigger
+                        aria-invalid={isInvalid}
+                        >
+                          <SelectValue placeholder="Select task lebel" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {
+                                taskLabels?.map((label) => (
+                                <SelectItem key={label._id} value={label._id} className='w-full flex justify-between items-center gap-3'>
+                                
+
+                                  <span>
+                                    {label.name}
+                                  </span>
+                                  <span style={{backgroundColor: label.color}} className='block rounded-md h-3 w-7'></span>
+                                  </SelectItem>
                               ))
                             }
                           

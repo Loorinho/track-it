@@ -14,6 +14,16 @@ export const updateTaskStatus = mutation({
   },
 })
 
+export const getLabelForTask = query({
+    args: {
+        labelId: v.id('labels'),
+    },
+    handler: async (ctx, args) => {
+        const label = await ctx.db.get(args.labelId)
+        return label
+    },
+})
+
 
 export const deleteTask = mutation({
   args: {
@@ -52,6 +62,20 @@ export const listProjectTasks = query({
       .withIndex('projectId', (q) => q.eq('projectId', args.projectId))
       .collect()
 
+    // const tasksWithLabels = await Promise.all(
+    //   tasks.map(async (task) => {
+    //     // if (task.label) {
+    //       const label = await ctx.db.get(task.label)
+
+    //       if(label) {
+    //         return { ...task, label: label }
+    //       }
+    //       return { ...task, label: undefined }
+    //     // }
+    //     // return task
+    //   })
+    // )
+
       return tasks
   },
 })
@@ -61,6 +85,7 @@ export const createProjectTask = mutation({
     name: v.string(),
     description: v.string(),
     priority: v.string(),
+    label: v.id('labels'),
     projectId: v.id('projects'),
   },
   handler: async (ctx, args) => {
@@ -69,6 +94,7 @@ export const createProjectTask = mutation({
       projectId: args.projectId,
       description: args.description,
       status: 'pending',
+      label: args.label,
       priority: args.priority,
 
     })

@@ -18,7 +18,8 @@ import {
   TableRow,
 } from "~/components/ui/table"
 import { useState } from 'react'
-import { Loader, Plus } from 'lucide-react'
+import { Loader, Plus, PlusCircle } from 'lucide-react'
+import { dateFormatter } from '~/lib/helpers'
 
 
 export const Route = createFileRoute('/projects/types')({
@@ -48,7 +49,7 @@ function RouteComponent() {
       }
 
       setOpen(false)
-      toast("Type created successfully: " + id, {
+      toast.success("Type created successfully: " + id, {
         position: "top-right",
         classNames: {
           content: "flex flex-col gap-2",
@@ -61,7 +62,8 @@ function RouteComponent() {
   })
 
 
-  return <section className='container p-8 flex flex-col gap-8 w-full'>
+  return <section className='min-h-screen my-6 max-w-3xl mx-auto'>
+    
 
 
     <Dialog
@@ -69,7 +71,7 @@ function RouteComponent() {
     onOpenChange={setOpen}
     >
         <DialogTrigger asChild>
-          <Button variant="outline" className='w-23 flex items-center cursor-pointer px-2'>Add New <Plus /></Button>
+          <Button variant="outline" className='w-23 flex items-center cursor-pointer px-3'>Add New <PlusCircle /></Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
@@ -171,7 +173,7 @@ function RouteComponent() {
 
            
             <TableCell className="text-right">{
-              new Date(type._creationTime).toLocaleString()
+              dateFormatter.format(type._creationTime).toLocaleString()
               }</TableCell>
           </TableRow>
         ))}
