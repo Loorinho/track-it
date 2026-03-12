@@ -93,7 +93,7 @@ export const createProjectTask = mutation({
       name: args.name,
       projectId: args.projectId,
       description: args.description,
-      status: 'pending',
+      status: 'backlog',
       label: args.label,
       priority: args.priority,
 

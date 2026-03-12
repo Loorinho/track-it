@@ -1,11 +1,11 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { api } from 'convex/_generated/api'
 import type { Id } from 'convex/_generated/dataModel'
 import { useMutation, useQuery } from 'convex/react'
-import { ArrowLeft, EllipsisVertical, ListTodo, Plus, Trash2 } from 'lucide-react'
+import { ArrowLeft, Edit, Edit2, EllipsisVertical, FolderKanban, Kanban, KanbanSquare, List, ListTodo, Plus, Table, Trash, Trash2 } from 'lucide-react'
 import { Skeleton } from '~/components/ui/skeleton'
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '~/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '~/components/ui/dropdown-menu'
 import { Input } from '~/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '~/components/ui/empty'
@@ -20,7 +20,10 @@ import { Textarea } from '~/components/ui/textarea'
 import { Progress } from '~/components/ui/progress'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
 import TaskItem from '~/components/task-item'
-import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '~/components/ui/item'
+import type { vi } from 'zod/v4/locales'
+import { ScrollArea } from '~/components/ui/scroll-area'
+import TasksBoard from '~/components/tasks-board'
+// import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '~/components/ui/item'
 
 export const Route = createFileRoute('/projects/$projectId')({
   component: RouteComponent,
@@ -38,6 +41,9 @@ function RouteComponent() {
 
   const {projectId} = Route.useLoaderData()
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(false)
+
+  const navigate = useNavigate()
 
   const taskPriorities: string[] = ['Low', 'Medium', 'High']
 
@@ -59,7 +65,7 @@ function RouteComponent() {
 
   const completedTasks = projectTasks?.filter((task) => task.status === 'completed') || []
   const inProgressTasks = projectTasks?.filter((task) => task.status === 'in-progress') || []
-  const backlogTasks = projectTasks?.filter((task) => task.status === 'pending') || []
+  const backlogTasks = projectTasks?.filter((task) => task.status === 'backlog') || []
 
   const form = useForm({
       defaultValues: {
@@ -95,6 +101,8 @@ function RouteComponent() {
         toast("Task added successfully: " + id, {
           position: "top-right",
         })
+
+        
       },
     })
   
@@ -125,33 +133,39 @@ function RouteComponent() {
     <>
     <div className='flex justify-between'>
   <h3 className='font-semibold text-2xl mb-2'>{project.name}</h3>
-    <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <EllipsisVertical className="text-center size-5 ml-3 cursor-pointer" />
-                      </DropdownMenuTrigger>
 
-                      <DropdownMenuContent >
-                        <DropdownMenuItem
-                          // onClick={() => setIsViewDetailsOpen(true)}
-                          className="flex gap-2 items-center  cursor-pointer"
-                        >
-                          {/* <PenLine className="size-3 " /> */}
-                          View
-                        </DropdownMenuItem>
 
-                          <DropdownMenuItem
-                            onClick={async () =>{
+        <DropdownMenu
+        open={openDropdown}
+        onOpenChange={setOpenDropdown}
+        >
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className="flex size-8 text-muted-foreground data-[state=open]:bg-muted cursor-pointer"
+            size="icon"
+            onClick={() => setOpenDropdown(true)}
+          >
+            <EllipsisVertical className="cursor-pointer size-5" />
 
-                    
-                            } 
-                          }
-                          className="flex gap-2 items-center  cursor-pointer"
-                        >
-                        Archive
-                        </DropdownMenuItem>
-                        
-                      </DropdownMenuContent>
-    </DropdownMenu>
+            {/* <span className="sr-only">Open menu</span> */}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-32">
+
+          <DropdownMenuGroup>
+           <DropdownMenuItem><Edit2 /> Edit</DropdownMenuItem>
+        
+          </DropdownMenuGroup>
+
+          <DropdownMenuSeparator />
+          <DropdownMenuItem variant="destructive" onClick={() => {
+            // setTaskToDelete(task._id)
+            // setDeleteOpen(true)
+            }}><Trash2 /> Delete</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
     </div>
     <p className=''>{project.description}</p>
     <Field className="w-full mt-4">
@@ -204,30 +218,27 @@ function RouteComponent() {
           projectTasks && projectTasks.length > 0 && (
 
             <>
-              {/* <Button onClick={() => setSheetOpen(true)} className='cursor-pointer mt-2'>Add New</Button> */}
-
               <div className="grid grid-cols-3 gap-3 my-3 scroll-x-auto">
-                <div className='max-h-200 border rounded-md p-4 scroll-auto'>
-                  <div className='border-b flex justify-between items-center'>
-                    <p className='font-semibold '>Backlog ({backlogTasks.length})</p>
-                    <Plus className='size-4 cursor-pointer' onClick={() => setSheetOpen(true)} />
-                  </div>
+                <div className='max-h border rounded-md p-4 overflow-scroll'>
+                    <div className='flex justify-between bg-white'>
+                      <p className='font-semibold '>Backlog ({backlogTasks.length})</p>
+                      <Plus className='size-4 cursor-pointer' onClick={() => setSheetOpen(true)} />
+                    </div>
+                    <TasksBoard tasks={backlogTasks} />
+                </div>
 
-                   {backlogTasks.map((task) => (
-                    <TaskItem key={task._id} task={task} />
-                  ))}
+                 <div className='max-h border rounded-md p-4 overflow-scroll'>
+                    <div className='flex justify-between bg-white'>
+                      <p className='font-semibold '>In Progress ({inProgressTasks.length})</p>
+                    </div>
+                    <TasksBoard tasks={inProgressTasks} />
                 </div>
-                <div className='min-h-500 border rounded-md p-4'>
-                  <p>In Progress</p>
-                  {inProgressTasks.map((task) => (
-                      <TaskItem key={task._id} task={task} />
-                  ))}
-                </div>
-                 <div className='min-h-500 border rounded-md p-4'>
-                  <p>Completed</p>
-                 {completedTasks.map((task) => (
-                      <TaskItem key={task._id} task={task} />
-                  ))}
+
+                 <div className='max-h border rounded-md p-4 overflow-scroll'>
+                    <div className='flex justify-between bg-white'>
+                      <p className='font-semibold '>Completed ({completedTasks.length})</p>
+                    </div>
+                    <TasksBoard tasks={completedTasks} />
                 </div>
               </div>
 

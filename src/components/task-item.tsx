@@ -1,5 +1,5 @@
 import type { Doc, Id } from 'convex/_generated/dataModel'
-import { EllipsisVertical } from 'lucide-react'
+import { Archive, CheckCircle, CheckCircle2, Edit2Icon, EllipsisVertical, ListCheck, MoreHorizontal, MoreVertical, TrendingUp } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { Button } from './ui/button'
 import { useState } from 'react'
@@ -16,7 +16,7 @@ function TaskItem({task}: {task: Doc<"tasks">}) {
         labelId: task.label
     })
 
-  console.log("Task Label: ", taskLabel)
+  // console.log("Task Label: ", taskLabel)
 
 
     const [openDropdown, setOpenDropdown] = useState(false)
@@ -25,6 +25,25 @@ function TaskItem({task}: {task: Doc<"tasks">}) {
 
     const updateTaskStatus = useMutation(api.tasks.updateTaskStatus)
     const deleteTask = useMutation(api.tasks.deleteTask)
+
+
+    const handleUpdateTaskStatus = async (status: string) => {
+
+      if(status === task.status) {
+        toast.error(`Task is already marked as ${status.replace("-", " ")}` , {
+            position: "top-right",
+        })
+        return
+      }
+        await updateTaskStatus({
+            taskId: task._id,
+            status
+        })
+
+        toast.success(`Task marked as ${status.replace("-", " ")}` , {
+            position: "top-right",
+        })
+    }
 
   return (
     <div key={task._id} className="p-4 border rounded-md my-2">
@@ -40,7 +59,7 @@ function TaskItem({task}: {task: Doc<"tasks">}) {
                       </span>
                   )} */}
 
-                  <Badge variant="outline" className='text-xs'>
+                  <Badge variant="outline" className='text-xs bg-'>
                     {taskLabel?.name}
                   </Badge>
 
@@ -59,62 +78,26 @@ function TaskItem({task}: {task: Doc<"tasks">}) {
           >
             <EllipsisVertical className="cursor-pointer size-5" />
 
-            {/* <span className="sr-only">Open menu</span> */}
+          
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
 
           <DropdownMenuGroup>
-           <DropdownMenuItem>Edit</DropdownMenuItem>
+           <DropdownMenuItem> <Edit2Icon /> Edit</DropdownMenuItem>
 
           <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Mark As</DropdownMenuSubTrigger>
+            <DropdownMenuSubTrigger><MoreVertical /> Mark As</DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem onClick={async() => {
-                        await updateTaskStatus({
-                        taskId: task._id,
-                        status: "pending"
-                    })
-
-                    toast.success("Task put back in the backlog" , {
-                        position: "top-right",
-                    })
-                }}>Backlog</DropdownMenuItem>
-                <DropdownMenuItem onClick={async() => {
-                        await updateTaskStatus({
-                        taskId: task._id,
-                        status: "in-progress"
-                    })
-
-                    toast.success("Task marked as In-Progress" , {
-                        position: "top-right",
-                    })
-                }}>In Progress</DropdownMenuItem>
+                <DropdownMenuItem onClick={async() => 
+                    handleUpdateTaskStatus("backlog")}><ListCheck /> Backlog</DropdownMenuItem>
+                <DropdownMenuItem onClick={async() =>handleUpdateTaskStatus("in-progress")}><TrendingUp /> In Progress</DropdownMenuItem>
                 <DropdownMenuItem
-                onClick={() => {
-                    updateTaskStatus({
-                        taskId: task._id,
-                        status: "completed"
-                    })
-
-                     toast.success("Task marked as Completed" , {
-                        position: "top-right",
-                    })
-                }}
-                >Completed</DropdownMenuItem>
+                onClick={() => handleUpdateTaskStatus("completed")}><CheckCircle2 /> Completed</DropdownMenuItem>
                 <DropdownMenuItem
-                onClick={() => {
-                    updateTaskStatus({
-                        taskId: task._id,
-                        status: "archived"
-                    })
-
-                     toast.success("Task marked as Archived" , {
-                        position: "top-right",
-                    })
-                }}
-                >Archived</DropdownMenuItem>
+                onClick={() => handleUpdateTaskStatus("archived")}
+                ><Archive /> Archived</DropdownMenuItem>
                 {/* <DropdownMenuSeparator />
                 <DropdownMenuItem>Advanced...</DropdownMenuItem> */}
               </DropdownMenuSubContent>
