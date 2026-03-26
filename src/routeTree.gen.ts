@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProjectsRouteRouteImport } from './routes/projects/route'
@@ -19,6 +20,11 @@ import { Route as ProjectsLabelRouteImport } from './routes/projects/label'
 import { Route as ProjectsProjectIdRouteImport } from './routes/projects/$projectId'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/projects': typeof ProjectsRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/signup': typeof SignupRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/label': typeof ProjectsLabelRoute
   '/projects/types': typeof ProjectsTypesRoute
@@ -80,6 +87,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/signup': typeof SignupRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/label': typeof ProjectsLabelRoute
   '/projects/types': typeof ProjectsTypesRoute
@@ -92,6 +100,7 @@ export interface FileRoutesById {
   '/projects': typeof ProjectsRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/signup': typeof SignupRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/label': typeof ProjectsLabelRoute
   '/projects/types': typeof ProjectsTypesRoute
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/login'
     | '/register'
+    | '/signup'
     | '/projects/$projectId'
     | '/projects/label'
     | '/projects/types'
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/register'
+    | '/signup'
     | '/projects/$projectId'
     | '/projects/label'
     | '/projects/types'
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
     | '/projects'
     | '/login'
     | '/register'
+    | '/signup'
     | '/projects/$projectId'
     | '/projects/label'
     | '/projects/types'
@@ -138,11 +150,19 @@ export interface RootRouteChildren {
   ProjectsRouteRoute: typeof ProjectsRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  SignupRoute: typeof SignupRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -232,6 +252,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProjectsRouteRoute: ProjectsRouteRouteWithChildren,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  SignupRoute: SignupRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

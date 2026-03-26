@@ -24,7 +24,7 @@ import { authClient } from '~/lib/auth-client'
 // import { authClient } from '~/lib/auth-client'
 import { cn } from '~/lib/utils'
 
-export const Route = createFileRoute('/login')({
+export const Route = createFileRoute('/signup')({
   component: RouteComponent,
 })
 
@@ -32,6 +32,7 @@ function RouteComponent() {
   const form = useForm({
     defaultValues: {
       email: '',
+      name: '',
       password: '',
     },
     validators: {
@@ -40,18 +41,20 @@ function RouteComponent() {
         password: z
           .string()
           .min(8, 'Password must be at least 8 characters long'),
+        name: z.string().min(1, 'Your name is required'),
       }),
     },
     onSubmit: async ({ value }) => {
-      await authClient.signIn.email(
+      await authClient.signUp.email(
         {
           email: value.email,
           password: value.password,
+          name: value.name,
           callbackURL: "http://localhost:3000/projects"
         },
         {
           onSuccess: () => {
-            toast.success('Account created successfully', {
+            toast.success('Logged in successfully', {
               position: 'bottom-right',
             })
 
@@ -73,11 +76,11 @@ function RouteComponent() {
         <Card>
           <CardHeader className="text-center">
             <CardTitle className="text-xl">Welcome back</CardTitle>
-            <CardDescription>Login with your Google account</CardDescription>
+            <CardDescription>SignUp with your Google account</CardDescription>
           </CardHeader>
           <CardContent>
             <form
-              id="login-form"
+              id="signup-form"
               onSubmit={(e) => {
                 e.preventDefault()
                 form.handleSubmit()
@@ -98,6 +101,35 @@ function RouteComponent() {
                 <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                   Or continue with
                 </FieldSeparator>
+
+                     <FieldGroup>
+                  <form.Field
+                    name="name"
+                    children={(field) => {
+                      const isInvalid =
+                        field.state.meta.isTouched && !field.state.meta.isValid
+                      return (
+                        <Field data-invalid={isInvalid} className="gap-0">
+                          <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+                          <Input
+                            id={field.name}
+                            name={field.name}
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            aria-invalid={isInvalid}
+                            placeholder="your name"
+                            autoComplete="off"
+                            type="text"
+                          />
+                          {isInvalid && (
+                            <FieldError errors={field.state.meta.errors} />
+                          )}
+                        </Field>
+                      )
+                    }}
+                  />
+                </FieldGroup>
 
                 <FieldGroup>
                   <form.Field
@@ -163,16 +195,16 @@ function RouteComponent() {
                     children={([isSubmitting]) => (
                       <Button
                         type="submit"
-                        form="login-form"
+                        form="signup-form"
                         className="cursor-pointer"
                         // disabled={isSubmitting || !canSubmit}
                       >
                         {isSubmitting ? (
                           <span className='flex gap-3'>
-                            <Loader2 className='spin'/> Logging in...{' '}
+                            <Loader2 className='spin'/> Creating Account..{' '}
                           </span>
                         ) : (
-                          ' Login'
+                          'Create Account'
                         )}
                         {/* Save changes */}
                       </Button>
@@ -180,19 +212,22 @@ function RouteComponent() {
                   ></form.Subscribe>
 
                   <FieldDescription className="text-center">
-                    Don&apos;t have an account? <Link to="/signup">Sign up</Link>
+                    Already have an account? <Link to="/login">Login</Link>
                   </FieldDescription>
                 </Field>
               </FieldGroup>
             </form>
           </CardContent>
         </Card>
+
         <FieldDescription className="px-6 text-center">
-          By clicking continue, you agree to our{' '}
-          <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
-        </FieldDescription>
+                  By clicking continue, you agree to our{' '}
+                  <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+                </FieldDescription>
+      
       </div>
 
+      {/* <LoginForm /> */}
     </section>
   )
 }

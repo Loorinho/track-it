@@ -51,7 +51,7 @@ export const Route = createFileRoute('/projects/')({
   component: RouteComponent,
   server: {
     middleware: [authMiddleware],
-  }
+  },
 })
 
 function RouteComponent() {
