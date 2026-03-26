@@ -1,5 +1,5 @@
 import type { Doc, Id } from 'convex/_generated/dataModel'
-import { Archive, CheckCircle, CheckCircle2, Edit2Icon, EllipsisVertical, ListCheck, MoreHorizontal, MoreVertical, TrendingUp } from 'lucide-react'
+import { Archive, CheckCircle, CheckCircle2, Edit2Icon, EllipsisVertical, ListCheck, MoreHorizontal, MoreVertical, Trash2, TrendingUp } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { Button } from './ui/button'
 import { useState } from 'react'
@@ -110,7 +110,7 @@ function TaskItem({task}: {task: Doc<"tasks">}) {
           <DropdownMenuItem variant="destructive" onClick={() => {
             setTaskToDelete(task._id)
             setDeleteOpen(true)
-            }}>Delete</DropdownMenuItem>
+            }}><Trash2 /> Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
         </div>

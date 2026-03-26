@@ -16,9 +16,21 @@ function RouteComponent() {
             <p>Track.IT</p>
           </div>
           <div className='flex gap-3 items-center'>
-                <Link to="/projects">Projects</Link>
-             <Link to="/projects/types">Project Types</Link>
-             <Link to="/projects/label">Labels</Link>
+                <Link to="/projects"
+                className="[&.active]:text-[#01605A]"
+                 activeOptions={{ exact: true
+
+                  }}
+              
+                >Projects</Link>
+             <Link to="/projects/types"
+               className="[&.active]:text-[#01605A]"
+                 activeOptions={{ exact: true }}
+             >Project Types</Link>
+             <Link to="/projects/label"
+               className="[&.active]:text-[#01605A]"
+                 activeOptions={{ exact: true }}
+             >Labels</Link>
 
           </div>
            <div className='flex items-center gap-5'>

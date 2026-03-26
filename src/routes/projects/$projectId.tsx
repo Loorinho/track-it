@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { api } from 'convex/_generated/api'
 import type { Id } from 'convex/_generated/dataModel'
 import { useMutation, useQuery } from 'convex/react'
-import { ArrowLeft, Edit, Edit2, EllipsisVertical, FolderKanban, Kanban, KanbanSquare, List, ListTodo, Plus, Table, Trash, Trash2 } from 'lucide-react'
+import { ArrowLeft, Edit, Edit2, EllipsisVertical, FolderKanban, Kanban, KanbanSquare, List, ListTodo, Plus, PlusCircle, PlusCircleIcon, Table, Trash, Trash2 } from 'lucide-react'
 import { Skeleton } from '~/components/ui/skeleton'
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '~/components/ui/dropdown-menu'
@@ -220,22 +220,22 @@ function RouteComponent() {
             <>
               <div className="grid grid-cols-3 gap-3 my-3 scroll-x-auto">
                 <div className='max-h border rounded-md p-4 overflow-scroll'>
-                    <div className='flex justify-between bg-white'>
+                    <div className='flex justify-between'>
                       <p className='font-semibold '>Backlog ({backlogTasks.length})</p>
-                      <Plus className='size-4 cursor-pointer' onClick={() => setSheetOpen(true)} />
+                      <PlusCircle className='size-4 cursor-pointer' onClick={() => setSheetOpen(true)} />
                     </div>
                     <TasksBoard tasks={backlogTasks} />
                 </div>
 
                  <div className='max-h border rounded-md p-4 overflow-scroll'>
-                    <div className='flex justify-between bg-white'>
+                    <div className='flex justify-between'>
                       <p className='font-semibold '>In Progress ({inProgressTasks.length})</p>
                     </div>
                     <TasksBoard tasks={inProgressTasks} />
                 </div>
 
                  <div className='max-h border rounded-md p-4 overflow-scroll'>
-                    <div className='flex justify-between bg-white'>
+                    <div className='flex justify-between '>
                       <p className='font-semibold '>Completed ({completedTasks.length})</p>
                     </div>
                     <TasksBoard tasks={completedTasks} />
