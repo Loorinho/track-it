@@ -63,7 +63,6 @@ export const listProjects = query({
     // )
 
     // console.log('Projects with progress', projectsWithProgress)
-    
 
     return projects.map((project) => ({
       ...project,

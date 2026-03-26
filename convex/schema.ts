@@ -26,8 +26,6 @@ export default defineSchema({
   }).index('projectId', ['projectId']),
   labels: defineTable({
     name: v.string(),
-    color: v.string()
+    color: v.string(),
   }).index('name', ['name']),
 })
-
-

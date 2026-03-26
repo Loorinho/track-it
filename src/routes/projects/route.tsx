@@ -7,44 +7,50 @@ export const Route = createFileRoute('/projects')({
 })
 
 function RouteComponent() {
-  return <section>
-     <nav className="sticky top-0 z-50 w-full">
-          <div className="border-b">
-
-        <div className="bg-background/40  mx-auto flex items-center justify-between gap-2 px-4 py-3 backdrop-blur-md">
-          <div className='flex items-center gap-2'>
-            <p>Track.IT</p>
-          </div>
-          <div className='flex gap-3 items-center'>
-                <Link to="/projects"
+  return (
+    <section>
+      <nav className="sticky top-0 z-50 w-full">
+        <div className="border-b">
+          <div className="bg-background/40  mx-auto flex items-center justify-between gap-2 px-4 py-3 backdrop-blur-md">
+            <div className="flex items-center gap-2">
+              <p>Track.IT</p>
+            </div>
+            <div className="flex gap-3 items-center">
+              <Link
+                to="/projects"
                 className="[&.active]:text-[#01605A]"
-                 activeOptions={{ exact: true
-
-                  }}
-              
-                >Projects</Link>
-             <Link to="/projects/types"
-               className="[&.active]:text-[#01605A]"
-                 activeOptions={{ exact: true }}
-             >Project Types</Link>
-             <Link to="/projects/label"
-               className="[&.active]:text-[#01605A]"
-                 activeOptions={{ exact: true }}
-             >Labels</Link>
-
-          </div>
-           <div className='flex items-center gap-5'>
-        
-            <ModeToggle />
-            <Button variant="outline" className='cursor-pointer' size="sm">Logout</Button>
+                activeOptions={{ exact: true }}
+              >
+                Projects
+              </Link>
+              <Link
+                to="/projects/types"
+                className="[&.active]:text-[#01605A]"
+                activeOptions={{ exact: true }}
+              >
+                Project Types
+              </Link>
+              <Link
+                to="/projects/label"
+                className="[&.active]:text-[#01605A]"
+                activeOptions={{ exact: true }}
+              >
+                Labels
+              </Link>
+            </div>
+            <div className="flex items-center gap-5">
+              <ModeToggle />
+              <Button variant="outline" className="cursor-pointer" size="sm">
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
-          </div>
+      </nav>
 
-        </nav>
-
-        <main>
-          <Outlet />
-        </main>
-  </section>
+      <main>
+        <Outlet />
+      </main>
+    </section>
+  )
 }

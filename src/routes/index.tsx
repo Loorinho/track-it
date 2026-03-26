@@ -1,15 +1,9 @@
-import {  createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
   component: Home,
 })
 
 function Home() {
-
-
-  return (
-    <main className="p-8 flex flex-col gap-16">
-    
-    </main>
-  )
+  return <main className="p-8 flex flex-col gap-16"></main>
 }

@@ -67,13 +67,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className='bg-background'>
-          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-            
-        {children}
-           <Toaster />
-        <Scripts />
-          </ThemeProvider>
+      <body className="bg-background">
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          {children}
+          <Toaster />
+          <Scripts />
+        </ThemeProvider>
       </body>
     </html>
   )

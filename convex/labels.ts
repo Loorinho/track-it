@@ -1,5 +1,5 @@
-import { v } from "convex/values"
-import { mutation, query } from "./_generated/server"
+import { v } from 'convex/values'
+import { mutation, query } from './_generated/server'
 
 export const listLabels = query({
   handler: async (ctx) => {
@@ -9,15 +9,15 @@ export const listLabels = query({
 })
 
 export const createLabel = mutation({
-    args: {
-        name: v.string(),
-        color: v.string(),
-    },
-    handler: async (ctx, args) => {
-        const labelId = await ctx.db.insert('labels', {
-            name: args.name,
-            color: args.color,
-        })
-        return labelId
-    }
+  args: {
+    name: v.string(),
+    color: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const labelId = await ctx.db.insert('labels', {
+      name: args.name,
+      color: args.color,
+    })
+    return labelId
+  },
 })

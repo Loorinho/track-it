@@ -1,6 +1,6 @@
-import { env } from 'better-auth';
-import 'dotenv/config';
-import { defineConfig } from 'drizzle-kit';
+import { env } from 'better-auth'
+import 'dotenv/config'
+import { defineConfig } from 'drizzle-kit'
 
 export default defineConfig({
   out: './drizzle',
@@ -9,4 +9,4 @@ export default defineConfig({
   dbCredentials: {
     url: env.DATABASE_URL!,
   },
-});
+})

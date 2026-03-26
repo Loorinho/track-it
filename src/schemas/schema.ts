@@ -21,7 +21,6 @@ export const createTaskSchema = z.object({
     .min(5, 'task description must be at least 5 characters.'),
 })
 
-
 export const createLabelSchema = z.object({
   name: z.string().min(3, 'Label name must be at least 3 characters.'),
   color: z.string().min(1, 'Label color is required.'),

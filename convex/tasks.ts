@@ -1,7 +1,6 @@
 import { v } from 'convex/values'
 import { mutation, query } from './_generated/server'
 
-
 export const updateTaskStatus = mutation({
   args: {
     taskId: v.id('tasks'),
@@ -15,15 +14,14 @@ export const updateTaskStatus = mutation({
 })
 
 export const getLabelForTask = query({
-    args: {
-        labelId: v.id('labels'),
-    },
-    handler: async (ctx, args) => {
-        const label = await ctx.db.get(args.labelId)
-        return label
-    },
+  args: {
+    labelId: v.id('labels'),
+  },
+  handler: async (ctx, args) => {
+    const label = await ctx.db.get(args.labelId)
+    return label
+  },
 })
-
 
 export const deleteTask = mutation({
   args: {
@@ -35,7 +33,7 @@ export const deleteTask = mutation({
   },
 })
 
-export const getProjectProgress =  query({
+export const getProjectProgress = query({
   args: {
     projectId: v.id('projects'),
   },
@@ -46,10 +44,11 @@ export const getProjectProgress =  query({
       .collect()
 
     const completedTasks = tasks.filter((task) => task.status === 'completed')
-    const progress = (tasks.length > 0 ? (completedTasks.length / tasks.length) * 100 : 0).toFixed(2)
+    const progress = (
+      tasks.length > 0 ? (completedTasks.length / tasks.length) * 100 : 0
+    ).toFixed(2)
 
-
-      return progress
+    return progress
   },
 })
 export const listProjectTasks = query({
@@ -76,7 +75,7 @@ export const listProjectTasks = query({
     //   })
     // )
 
-      return tasks
+    return tasks
   },
 })
 
@@ -96,7 +95,6 @@ export const createProjectTask = mutation({
       status: 'backlog',
       label: args.label,
       priority: args.priority,
-
     })
     return taskId
   },

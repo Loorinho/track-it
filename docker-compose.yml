@@ -1,17 +1,17 @@
 services:
-    track_it_dev-database:
-      image: postgres:alpine
-      restart: unless-stopped
-      environment: 
-        POSTGRES_USER: track.it.izzy
-        POSTGRES_PASSWORD: track.it.inhos
-        POSTGRES_DB: track_it_dev
+  track_it_dev-database:
+    image: postgres:alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: track.it.izzy
+      POSTGRES_PASSWORD: track.it.inhos
+      POSTGRES_DB: track_it_dev
 
-      ports:
-        - '5439:5432'
+    ports:
+      - '5439:5432'
 
-      volumes: 
-        - track_it_dev-db:/var/lib/posgressql
+    volumes:
+      - track_it_dev-db:/var/lib/posgressql
 
-volumes: 
+volumes:
   track_it_dev-db:

@@ -1,38 +1,39 @@
 import type { Doc } from 'convex/_generated/dataModel'
-import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card'
+import {
+  Card,
+  CardAction,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from './ui/card'
 import { dateFormatter } from '~/lib/helpers'
 
-export default function ProjectCard({project}: {project: Doc<"projects">} ) {
-
+export default function ProjectCard({ project }: { project: Doc<'projects'> }) {
   return (
-                <Card className="@container/card w-72 max-w-70 pt-0 h-40 px-1 py-4">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold tabular-nums @[250px]/card:text-2xl">
-          <p>
+    <Card className="@container/card w-72 max-w-70 pt-0 h-40 px-1 py-4">
+      <CardHeader>
+        <CardTitle className="text-xl font-semibold tabular-nums @[250px]/card:text-2xl">
+          <p>{project.name}</p>
 
-            {project.name}
-          </p>
-
-            {/* <Badge variant="outline">
+          {/* <Badge variant="outline">
               <LoaderIcon />
               {project.status}
             </Badge> */}
-          </CardTitle>
-          <CardDescription className='line-clamp-3 text-muted-foreground h-10'>{project.description}
-
-          </CardDescription>
-          <CardAction>
-            
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm mx-0">
-          {/* <div className="text-muted-foreground">
+        </CardTitle>
+        <CardDescription className="line-clamp-3 text-muted-foreground h-10">
+          {project.description}
+        </CardDescription>
+        <CardAction></CardAction>
+      </CardHeader>
+      <CardFooter className="flex-col items-start gap-1.5 text-sm mx-0">
+        {/* <div className="text-muted-foreground">
             Type: {project.type}
           </div> */}
-          <div className="line-clamp-1 flex gap-2 font-thin ">
-            Updated on: {dateFormatter.format(project._creationTime)}
-          </div>
-        </CardFooter>
-      </Card>
+        <div className="line-clamp-1 flex gap-2 font-thin ">
+          Updated on: {dateFormatter.format(project._creationTime)}
+        </div>
+      </CardFooter>
+    </Card>
   )
 }
